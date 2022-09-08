@@ -2,7 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/manifest.json</loc>
+    <loc>https://lemontreeyi.github.io/music/index.html</loc>
+    
+    <lastmod>2022-09-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lemontreeyi.github.io/manifest.json</loc>
     
     <lastmod>2022-09-07</lastmod>
     
@@ -11,7 +20,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/posts/4a17b156.html</loc>
+    <loc>https://lemontreeyi.github.io/posts/4a17b156.html</loc>
     
     <lastmod>2022-09-06</lastmod>
     
@@ -21,8 +30,8 @@
   
 
   <url>
-    <loc>http://example.com/</loc>
-    <lastmod>2022-09-07</lastmod>
+    <loc>https://lemontreeyi.github.io/</loc>
+    <lastmod>2022-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
