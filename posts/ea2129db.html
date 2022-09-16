@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Ardupilot编译 | LemonTreeyi</title><meta name="keywords" content="无人机,Ardupilot,cygwin"><meta name="author" content="Lemontreeyi"><meta name="copyright" content="Lemontreeyi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. Ardupilot初识1.1 Ardupilot是什么ArduPilot - Versatile, Trusted, Open Ardupilot项目由一群爱好者开发维护，早期的Ardupilot是APM（Ardupilot Mega）的固件，也称Ardupilot固件为APM。随着项目功能不断增多，代码不断壮大，原先的APM2硬件平台不能胜任最新代码，开发者将Ardupilot代码转移到P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ardupilot编译">
+<meta property="og:url" content="https://lemontreeyi.github.io/posts/ea2129db.html">
+<meta property="og:site_name" content="LemonTreeyi">
+<meta property="og:description" content="1. Ardupilot初识1.1 Ardupilot是什么ArduPilot - Versatile, Trusted, Open Ardupilot项目由一群爱好者开发维护，早期的Ardupilot是APM（Ardupilot Mega）的固件，也称Ardupilot固件为APM。随着项目功能不断增多，代码不断壮大，原先的APM2硬件平台不能胜任最新代码，开发者将Ardupilot代码转移到P">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgtg.com/2022/09/15/ypKmt.jpg">
+<meta property="article:published_time" content="2022-09-15T07:43:55.000Z">
+<meta property="article:modified_time" content="2022-09-15T12:17:50.838Z">
+<meta property="article:author" content="Lemontreeyi">
+<meta property="article:tag" content="Ardupilot">
+<meta property="article:tag" content="UVA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgtg.com/2022/09/15/ypKmt.jpg"><link rel="shortcut icon" href="/img/siteicon/32.png"><link rel="canonical" href="https://lemontreeyi.github.io/posts/ea2129db"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/manifest.json"/><meta name="msapplication-TileColor" content="#5CA1FF"/><link rel="apple-touch-icon" sizes="180x180" href="/source/img/siteicon/128.png"/><link rel="icon" type="image/png" sizes="32x32" href="/source/img/siteicon/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/source/img/siteicon/16.png"/><link rel="mask-icon" href="/source/img/siteicon/128.png" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ardupilot编译',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-15 20:17:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/css/runtime/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="LemonTreeyi" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/archives/"><i class="fa-fw fas fa-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/music/"><i class="fa-fw fas fa-music faa-tada"></i><span> 音乐馆</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><i class="fa-fw fas fa-home faa-tada"></i><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/cinemas/index.html"><i class="fa-fw fas fa-home faa-tada"></i><span> 追剧</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><i class="fa-fw fas fa-envelope faa-tada"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhifeiji"></use></svg><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.imgtg.com/2022/09/15/ypKmt.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LemonTreeyi</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/archives/"><i class="fa-fw fas fa-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/music/"><i class="fa-fw fas fa-music faa-tada"></i><span> 音乐馆</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/bangumis/index.html"><i class="fa-fw fas fa-home faa-tada"></i><span> 追番</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/cinemas/index.html"><i class="fa-fw fas fa-home faa-tada"></i><span> 追剧</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/comments/"><i class="fa-fw fas fa-envelope faa-tada"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/about/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhifeiji"></use></svg><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Ardupilot编译</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-09-15T07:43:55.000Z" title="发表于 2022-09-15 15:43:55">2022-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-09-15T12:17:50.838Z" title="更新于 2022-09-15 20:17:50">2022-09-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/UVA/">UVA</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Ardupilot编译"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="1-Ardupilot初识"><a href="#1-Ardupilot初识" class="headerlink" title="1. Ardupilot初识"></a>1. Ardupilot初识</h1><h2 id="1-1-Ardupilot是什么"><a href="#1-1-Ardupilot是什么" class="headerlink" title="1.1 Ardupilot是什么"></a>1.1 Ardupilot是什么</h2><p><a target="_blank" rel="noopener" href="https://ardupilot.org/">ArduPilot - Versatile, Trusted, Open</a></p>
+<p><code>Ardupilot</code>项目由一群爱好者开发维护，早期的Ardupilot是APM（<code>Ardupilot Mega</code>）的固件，也称<code>Ardupilot固件</code>为<code>APM</code>。随着项目功能不断增多，代码不断壮大，原先的<code>APM2</code>硬件平台不能胜任最新代码，开发者将<code>Ardupilot</code>代码转移到<code>Pixhawk</code>硬件平台上，兼容了<code>Pixhawk</code>硬件平台（所以<code>Pix</code>硬件平台有<code>PX4</code>和<code>APM</code>两套飞控代码）。</p>
+<p><code>Ardupilot</code>是基于<code>Pixhawk</code>原生代码开发的上层应用，将底层的<code>PX4Firmware</code>和<code>Nuttx</code>等抽象为<code>HAL(Hardware Abstraction Layer,硬件抽象层)</code>，开发者只需要关心上层应用就可以基于<code>Pixhawk</code>原生设计上层控制逻辑。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/OJiBB3pz.png" alt="APM" style="zoom: 67%;" /></p>
+<h2 id="1-2-下载并编译Ardupilot"><a href="#1-2-下载并编译Ardupilot" class="headerlink" title="1.2 下载并编译Ardupilot"></a>1.2 下载并编译Ardupilot</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Sandman06/article/details/115617932">Pixhawkardupilot源码windows编译教程</a></p>
+<blockquote>
+<p>若网络不佳（没有魔法可用），请直接跳到<strong>1.2.3使用大佬提供的资源</strong>（初学者推荐直接跳到该部分）</p>
+</blockquote>
+<h3 id="1-2-1-下载完整源码"><a href="#1-2-1-下载完整源码" class="headerlink" title="1.2.1 下载完整源码"></a>1.2.1 下载完整源码</h3><p><a target="_blank" rel="noopener" href="https://github.com/ArduPilot/ardupilot.git">Ardupilot开源地址</a>，一般不用下载全部源码</p>
+<p>这里不推荐直接在<code>github</code>网页上下载压缩包，因为直接下载会无法下载依赖库，即项目中的<code>modules</code>目录，这里使用<code>git</code>工具下载。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/ArduPilot/ardupilot.git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">git <span class="built_in">clone</span> --recursive 命令用于循环<span class="built_in">clone</span>子项目，此处用于<span class="built_in">clone</span>依赖项</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-2-2-Copter-3-6-12获取"><a href="#1-2-2-Copter-3-6-12获取" class="headerlink" title="1.2.2 Copter-3.6.12获取"></a>1.2.2 Copter-3.6.12获取</h3><ul>
+<li>下载源码</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. <span class="built_in">clone</span>完整分支，再checkout出需要的版本</span></span><br><span class="line">git clone https://github.com/ArduPilot/ardupilot.git</span><br><span class="line">cd ardupilot    # 进入clone下的项目目录</span><br><span class="line">git tag         # 查看现有的tag（按下j和k上下翻页，按q退出）</span><br><span class="line">git checkout Copter-3.6.6   # 挑选出我们需要的3.6.6版本</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 仅<span class="built_in">clone</span>需要的分支，可减少存储容量占用（推荐）</span></span><br><span class="line">git clone -b Copter-3.6.6 https://github.com/ArduPilot/ardupilot.git    # -b选项选择3.6.6版本</span><br><span class="line">cd ardupilot</span><br></pre></td></tr></table></figure>
+<ul>
+<li>更新子模块（位于项目目录的<code>modules</code>目录下）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/zfxpGq7M.png" alt=""></p>
+<blockquote>
+<p>若遇到如上报错，原因是需要用<code>https://</code>才能读到数据，只需要做一个git全局配置即可解决(如下)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global url.&quot;https://&quot;.insteadOf git://</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>遇到SSL相关报错时，一般是网络问题，多尝试几次，也可接触SSL验证如下：</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.sslVerfy &quot;false&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-3-使用大佬提供的资源"><a href="#1-2-3-使用大佬提供的资源" class="headerlink" title="1.2.3 使用大佬提供的资源"></a>1.2.3 使用大佬提供的资源</h3><blockquote>
+<p>由于源码在github上，国内访问速度可能很慢，且编译环境搭建过程任意出错。官网提供的自动化搭建环境脚本有问题，且需要访问外网，搭建后无法正常编译。所以这里使用<code>@怒飞垂云</code>大佬提供的源码和编译环境，链接如下。</p>
+</blockquote>
+<p>飞控Copter-3.6.12版本源码：<a target="_blank" rel="noopener" href="https://box.nju.edu.cn/f/e0c39dba3f4d487d8bfe/">Ardupilot-切换到Copter-3.6.12分支-更新过子模块-解压后可直接编译</a><br>编译环境安装包：<a target="_blank" rel="noopener" href="https://box.nju.edu.cn/f/4ded1e79aa3b4795b672/">编译环境安装包</a></p>
+<ul>
+<li>上述压缩包存在<em>NJU-box</em>中，若访问速度过慢（正常速度很快），可直接使用<code>@怒飞垂云</code>大佬提供的百度网盘链接（百度网盘速度很慢，可使用油猴插件转换链接，这里不赘述，参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/softxmm/p/13972678.html#idm">百度网盘简易下载助手（直链下载复活版）</a>）<ul>
+<li><strong>软件安装包</strong>：<strong><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1cU6ellABTuKuSB-SkRtfXg">https://pan.baidu.com/s/1cU6ellABTuKuSB-SkRtfXg</a></strong>　提取码：nfcy</li>
+<li><strong>飞控源程序</strong>：<strong><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1p9pxl58X0yp1FP_nnxLQlQ">https://pan.baidu.com/s/1p9pxl58X0yp1FP_nnxLQlQ</a></strong>　提取码：nfcy</li>
+</ul>
+</li>
+<li>更多资料参考<code>@怒飞垂云</code>大佬的主页：<a target="_blank" rel="noopener" href="http://www.nufeichuiyun.com/?page_id=121">飞控固件开发教程 - 怒飞垂云 | 无人机知识库 (nufeichuiyun.com)</a></li>
+</ul>
+<h3 id="1-2-4-编译环境搭建"><a href="#1-2-4-编译环境搭建" class="headerlink" title="1.2.4 编译环境搭建"></a>1.2.4 编译环境搭建</h3><p>下载编译环境安装压缩包解压后如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/160CBxga.png" style="zoom:80%;" /></p>
+<h4 id="安装cygwin64（在windows上运行的linux模拟环境）"><a href="#安装cygwin64（在windows上运行的linux模拟环境）" class="headerlink" title="安装cygwin64（在windows上运行的linux模拟环境）"></a>安装<code>cygwin64</code>（在windows上运行的linux模拟环境）</h4><p>注意，上图中的<code>cygwin64.rar</code>压缩包为完整的软件，无需额外安装。将<code>cygwin64.rar</code>解压后进入<code>cygwin64</code>目录，该目录下有一个<code>cygwin64</code>目录（压缩了两层），将<code>cygwin64</code>目录移动到<code>C盘</code>根目录下，确保移动后<code>C:/cygwin64</code>路径下为各个子目录，而不是又套了一个cygwin64目录。如下图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/7ve1Cotj.png" style="zoom:80%;" /></p>
+<p>移动后，可将<code>Cygwin64 Terminal</code>快捷方式复制到桌面，方便访问。注意该快捷方式指向固定路径（即上述移动的路径，可右键属性查看），若cygwin64目录未放在C盘根目录，可能无法直接使用该快捷方式。</p>
+<p>在下一步之前我们需要先打开一次<strong>Cygwin64 Terminal</strong>快捷方式，然后cygwin会自动为你创建一个linux用户，并且创建一些基本配置文件（如下图）。若不进行该步骤，会发现在下一个步骤中没有用户目录。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/aNG4GzZL.jpg" alt=""></p>
+<p>完成上述步骤后，将<code>1.2.3</code>中提到的Ardupilot源码（解压后得到的一个<code>ardupilot文件夹</code>）移到<code>cygwin64/home/&lt;username&gt;</code>目录下，比如我的用户名是20417，则移动后源码路径为<code>C:\cygwin64\home\20417\ardupilot</code>，移动是为了在cygwin64终端中可以在home目录中访问。</p>
+<p>最后还要添加一个windows环境变量。在<code>设置-&gt;系统-&gt;系统信息-&gt;高级系统设置</code>中编辑系统属性（也可直接在windows搜索框中搜索<code>编辑系统环境变量</code>），点击<code>环境变量</code>，</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/0JCy9QA5.png" style="zoom:67%;" /></p>
+<p>将<code>C:\cygwin64\bin</code>和<code>C:\cygwin64\sbin</code>两个路径添加到<code>Path</code>变量中，如下图（若cygwin64安装路径与上文不同，请根据自己的实际路径添加环境变量）</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img1.imgtp.com/2022/09/15/vwk7uFOO.png" style="zoom: 67%;" /></p>
+<h4 id="安装交叉编译器"><a href="#安装交叉编译器" class="headerlink" title="安装交叉编译器"></a>安装交叉编译器</h4><p>双击编译环境安装包文件夹中的<code>gcc-arm-none-eabi...</code>进行安装，注意调整自己的安装路径，且安装路径中不可以有中文或空格等字符（默认安装路径有空格，需自行修改）。</p>
+<ul>
+<li>注意安装完成后不要直接退出，点击<strong>Add path to environment variable</strong>添加其对应环境变量。</li>
+</ul>
+<p>最后还需自己添加一个环境变量，按照<code>安装cygwin64</code>中的方法，将<code>gcc-arm-none-eabi...</code>安装路径下的<code>arm-none-eabi/bin</code>添加到环境变量，比如我的是<code>F:\Tools\gcc-arm-none-eabi-2017-q2\arm-none-eabi\bin</code></p>
+<h4 id="安装Mavlink支持包"><a href="#安装Mavlink支持包" class="headerlink" title="安装Mavlink支持包"></a>安装Mavlink支持包</h4><p>右键以管理员身份运行安装包文件夹中的<code>MAVProxySetup-latest.exe</code>，安装过程一直默认下一步即可。</p>
+<h3 id="1-2-5-基于waf编译固件"><a href="#1-2-5-基于waf编译固件" class="headerlink" title="1.2.5 基于waf编译固件"></a>1.2.5 基于waf编译固件</h3><blockquote>
+<p>waf是基于python运行的一个编译工具，在解压后的<strong>ardupilot</strong>源码根目录下（需要的依赖已经更新过了，可直接使用）</p>
+</blockquote>
+<ul>
+<li>编译固件<br>打开<strong>Cygwin64 Terminal</strong>终端，执行如下命令：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd ardupilot     # 进入飞控源码目录</span><br><span class="line">ls               # 查看源码目录中的文件</span><br><span class="line">./waf configure --board CubeBlack  # 配置飞控板类型为CubeBlack，注意不要漏掉waf前的./</span><br><span class="line">./waf copter               # 开始编译四旋翼固件</span><br></pre></td></tr></table></figure>
+<p>编译完成后，可以在<strong>ardupilot/build/CubeBlack/bin</strong>目录下看到自己编译的固件<code>arducopter.apj</code>，得到该文件即可使用<strong>MissionPlanner</strong>进行烧写。</p>
+<ul>
+<li>若过程中出现问题中断，可使用如下命令清除缓存，同时删除<code>ardupilot/build</code>目录</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./waf distclean</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://lemontreeyi.github.io">Lemontreeyi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://lemontreeyi.github.io/posts/ea2129db.html">https://lemontreeyi.github.io/posts/ea2129db.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://lemontreeyi.github.io" target="_blank">LemonTreeyi</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ardupilot/">Ardupilot</a><a class="post-meta__tags" href="/tags/UVA/">UVA</a></div><div class="post_share"><div class="social-share" data-image="https://i.imgtg.com/2022/09/15/ypKmt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/e2fcd295.html"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yy-1310996333.cos.ap-nanjing.myqcloud.com/PicOIP-C.dTKvVJ0kW5QOczCZ-pPimwHaDt" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">WSL2配置代理</div></div></a></div><div class="next-post pull-right"><a href="/posts/4a17b156.html"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Lemontreeyi</div><div class="author-info__description">A blog for person...</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/lemontreeyi" target="_blank" title="Github"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-gitHub"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=2268025923@qq.com" target="_blank" title="Email"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-youxiang"></use></svg></a><a class="social-icon faa-parent animated-hover" href="/atom.xml" target="_blank" title="RSS"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-rss"></use></svg></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/511833824?spm_id_from=333.1007.0.0" target="_blank" title="BiliBili"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-bilibili"></use></svg></a><a class="social-icon faa-parent animated-hover" href="tencent://Message/?Uin=2041729070&amp;amp;websiteName=local.edu.com:8888=&amp;amp;Menu=yes" target="_blank" title="QQ"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-QQ1"></use></svg></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Ardupilot%E5%88%9D%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">1. Ardupilot初识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Ardupilot%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Ardupilot是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E7%BC%96%E8%AF%91Ardupilot"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 下载并编译Ardupilot</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%95%B4%E6%BA%90%E7%A0%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 下载完整源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-Copter-3-6-12%E8%8E%B7%E5%8F%96"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 Copter-3.6.12获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-%E4%BD%BF%E7%94%A8%E5%A4%A7%E4%BD%AC%E6%8F%90%E4%BE%9B%E7%9A%84%E8%B5%84%E6%BA%90"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3 使用大佬提供的资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4-%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.2.4 编译环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85cygwin64%EF%BC%88%E5%9C%A8windows%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%9A%84linux%E6%A8%A1%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">安装cygwin64（在windows上运行的linux模拟环境）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%99%A8"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">安装交叉编译器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Mavlink%E6%94%AF%E6%8C%81%E5%8C%85"><span class="toc-number">1.2.4.3.</span> <span class="toc-text">安装Mavlink支持包</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5-%E5%9F%BA%E4%BA%8Ewaf%E7%BC%96%E8%AF%91%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.2.5 基于waf编译固件</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/e2fcd295.html" title="WSL2配置代理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yy-1310996333.cos.ap-nanjing.myqcloud.com/PicOIP-C.dTKvVJ0kW5QOczCZ-pPimwHaDt" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WSL2配置代理"/></a><div class="content"><a class="title" href="/posts/e2fcd295.html" title="WSL2配置代理">WSL2配置代理</a><time datetime="2022-09-15T14:49:26.000Z" title="发表于 2022-09-15 22:49:26">2022-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ea2129db.html" title="Ardupilot编译"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.imgtg.com/2022/09/15/ypKmt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ardupilot编译"/></a><div class="content"><a class="title" href="/posts/ea2129db.html" title="Ardupilot编译">Ardupilot编译</a><time datetime="2022-09-15T07:43:55.000Z" title="发表于 2022-09-15 15:43:55">2022-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4a17b156.html" title="Hello World"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/posts/4a17b156.html" title="Hello World">Hello World</a><time datetime="2022-09-06T15:21:46.126Z" title="发表于 2022-09-06 23:21:46">2022-09-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Lemontreeyi</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async src="//at.alicdn.com/t/font_2264842_3izu8i5eoc2.js"></script><div class="aplayer no-destroy" data-id="7583786362" data-server="tencent" data-type="playlist"   data-order="list" data-fixed="true" data-preload="auto" data-autoplay="false" data-mutex="true" ></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><div class="app-refresh" id="app-refresh" style="position: fixed;top: -2.2rem;left: 0;right: 0;z-index: 99999;padding: 0 1rem;font-size: 15px;height: 2.2rem;transition: all 0.3s ease;"><div class="app-refresh-wrap" style=" display: flex;color: #fff;height: 100%;align-items: center;justify-content: center;"><label>✨ 有新文章啦！ 👉</label><a href="javascript:void(0)" onclick="location.reload()"><span style="color: #fff;text-decoration: underline;cursor: pointer;">🍗点击食用🍔</span></a></div></div><script>if ('serviceWorker' in navigator) {
+if (navigator.serviceWorker.controller) {
+navigator.serviceWorker.addEventListener('controllerchange', function() {
+showNotification()
+})
+}
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('/sw.js')
+})
+}
+function showNotification() {
+if (GLOBAL_CONFIG.Snackbar) {
+var snackbarBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+GLOBAL_CONFIG.Snackbar.bgLight :
+GLOBAL_CONFIG.Snackbar.bgDark
+var snackbarPos = GLOBAL_CONFIG.Snackbar.position
+Snackbar.show({
+text: '✨ 有新文章啦！ 👉',
+backgroundColor: snackbarBg,
+duration: 500000,
+pos: snackbarPos,
+actionText: '🍗点击食用🍔',
+actionTextColor: '#fff',
+onActionClick: function(e) {
+location.reload()
+},
+})
+} else {
+var showBg =
+document.documentElement.getAttribute('data-theme') === 'light' ?
+'#5CA1FF' :
+'#1f1f1f'
+var cssText = `top: 0; background: ${showBg};`
+document.getElementById('app-refresh').style.cssText = cssText
+}
+}</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var qweather_key = '22ec98264b0645799ffa251939f5e255';
+  var gaud_map_key = '988ea85608a22aa9fabd170054eaf1df';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '112.982279,28.19409';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.2.2" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://www.jsdelivr.com/" style="margin-inline:5px" data-title="本站使用JsDelivr为静态资源提供CDN加速" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat&amp;logo=jsDelivr" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime/runtime.min.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><script data-pjax src="https://cdn.cbd.int/hexo-filter-gitcalendar/lib/gitcalendar.js"></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://calendar.lemontreeyi.top/api?lemontreeyi",['#ebedf0', '#f0fff4', '#dcffe4', '#bef5cb', '#85e89d', '#34d058', '#28a745', '#22863a', '#176f2c', '#165c26', '#144620'],'lemontreeyi')
+    }
+  </script><script async src="/js/ali_font.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/"});</script></body></html>
